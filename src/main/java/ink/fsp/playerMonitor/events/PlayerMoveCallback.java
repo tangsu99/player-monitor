@@ -10,7 +10,7 @@ public interface PlayerMoveCallback {
     Event<PlayerMoveCallback> EVENT = EventFactory.createArrayBacked(PlayerMoveCallback.class,
             (listeners) -> (player, world) -> {
                 for (PlayerMoveCallback listener : listeners) {
-                    ActionResult result = listener.onPlayerUseEntity(player, world);
+                    ActionResult result = listener.onPlayerMove(player, world);
 
                     if (result != ActionResult.PASS) {
                         return result;
@@ -19,5 +19,5 @@ public interface PlayerMoveCallback {
                 return ActionResult.PASS;
             });
 
-    ActionResult onPlayerUseEntity(PlayerEntity player, World world);
+    ActionResult onPlayerMove(PlayerEntity player, World world);
 }

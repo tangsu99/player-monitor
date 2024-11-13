@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 public class ConstantlyMonitor implements PlayerMoveCallback {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
     @Override
-    public ActionResult onPlayerUseEntity(PlayerEntity player, World world) {
+    public ActionResult onPlayerMove(PlayerEntity player, World world) {
         LOGGER.info(
                 "{}[x: {}, y: {}, z: {}] in {}",
                 player.getGameProfile().getName(),

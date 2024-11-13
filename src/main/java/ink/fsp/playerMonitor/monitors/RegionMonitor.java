@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class RegionMonitor implements PlayerMoveCallback {
     @Override
-    public ActionResult onPlayerUseEntity(PlayerEntity player, World world) {
+    public ActionResult onPlayerMove(PlayerEntity player, World world) {
         return ActionResult.PASS;
     }
 }
