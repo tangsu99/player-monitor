@@ -1,5 +1,6 @@
 package ink.fsp.playerMonitor;
 
+import ink.fsp.playerMonitor.commands.CommandsRegister;
 import ink.fsp.playerMonitor.database.DatabaseManager;
 import ink.fsp.playerMonitor.monitors.TickMonitor;
 import net.fabricmc.api.ModInitializer;
@@ -18,5 +19,6 @@ public class PlayerMonitor implements ModInitializer {
 //        PlayerMoveCallback.EVENT.register(new ConstantlyMonitor());
 //        PlayerMoveCallback.EVENT.register(new RegionMonitor());
         ServerTickEvents.END_SERVER_TICK.register(new TickMonitor());
+        CommandsRegister.registerCommands();
     }
 }
