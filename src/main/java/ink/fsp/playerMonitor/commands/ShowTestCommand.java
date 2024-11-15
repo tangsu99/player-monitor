@@ -5,17 +5,17 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import ink.fsp.playerMonitor.database.DatabaseManager;
 import ink.fsp.playerMonitor.database.ResultItem.TracknItem;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import ink.fsp.playerMonitor.particle.ParticleItem;
+import ink.fsp.playerMonitor.particle.ParticleManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
+
+
 
 public class ShowTestCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -37,9 +37,8 @@ public class ShowTestCommand {
                     source.sendMessage(
                             Text.literal(tracknItem.toString())
                     );
-                    ParticleEffect particle = ParticleTypes.FLAME;
-                    context.getSource().getServer().getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of("minecraft:overworld")))
-                            .addParticle(particle, tracknItem.x, tracknItem.y, tracknItem.z, 0.0, 0.0, 0.0);
+                    ParticleManager.addParticle(new ParticleItem(context.getSource().getServer().getOverworld(), new Vec3d(tracknItem.x, tracknItem.y, tracknItem.z), 10000));
+//                    ParticleManager.spawnParticle(context.getSource().getServer().getOverworld(), tracknItem.x, tracknItem.y, tracknItem.z);
                 });
             }
         }

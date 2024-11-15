@@ -3,6 +3,7 @@ package ink.fsp.playerMonitor;
 import ink.fsp.playerMonitor.commands.CommandsRegister;
 import ink.fsp.playerMonitor.database.DatabaseManager;
 import ink.fsp.playerMonitor.monitors.TickMonitor;
+import ink.fsp.playerMonitor.particle.ParticleManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ public class PlayerMonitor implements ModInitializer {
 //        PlayerMoveCallback.EVENT.register(new ConstantlyMonitor());
 //        PlayerMoveCallback.EVENT.register(new RegionMonitor());
         ServerTickEvents.END_SERVER_TICK.register(new TickMonitor());
+        ServerTickEvents.END_SERVER_TICK.register(new ParticleManager());
         CommandsRegister.registerCommands();
+
     }
 }

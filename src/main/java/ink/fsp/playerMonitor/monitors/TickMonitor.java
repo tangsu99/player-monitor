@@ -12,7 +12,7 @@ public class TickMonitor implements ServerTickEvents.EndTick {
 
     @Override
     public void onEndTick(MinecraftServer minecraftServer) {
-        if (ticks++ % 200 == 0) {
+        if (ticks++ % 100 == 0) {
             minecraftServer.getPlayerManager().getPlayerList().forEach(player -> {
                 DatabaseManager.insert(
                         player.getGameProfile().getName(),
