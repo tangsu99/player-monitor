@@ -1,5 +1,6 @@
-package ink.fsp.playerMonitor.utils;
+package ink.fsp.playerMonitor.particle;
 
+import ink.fsp.playerMonitor.utils.LineUtils;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.math.Vec3d;
