@@ -1,5 +1,6 @@
 package ink.fsp.playerMonitor.particle;
 
+import ink.fsp.playerMonitor.PlayerMonitor;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.math.Vec3d;
@@ -15,19 +16,21 @@ public class ParticleItem {
         this.world = world;
         this.position = position;
         this.particleEffect = ParticleManager.PARTICLE_TYPE;
-        this.duration = duration;
+        this.duration = duration * 20;
     }
 
-    public ParticleItem(ServerWorld world, Vec3d position, ParticleEffect particleEffect, int duration) {
+    public ParticleItem(ServerWorld world, Vec3d position, int duration, ParticleEffect particleEffect) {
         this.world = world;
         this.position = position;
+        this.duration = duration * 20;
         this.particleEffect = particleEffect;
-        this.duration = duration;
     }
 
     public boolean spawnParticle() {
         if (tickCount++ < duration) {
-            world.spawnParticles(particleEffect, position.x, position.y, position.z, 1, 0, 0, 0, 0);
+            if (tickCount % 20 == 0) {
+                world.spawnParticles(particleEffect, position.x, position.y, position.z, 1, 0, 0, 0, 0);
+            }
             return true;
         }
         return false;

@@ -21,15 +21,6 @@ public class TickMonitor implements ServerTickEvents.EndTick {
                         (int) player.getZ(),
                         player.getWorld().getDimensionEntry().getIdAsString()
                 );
-
-                LOGGER.info(
-                        "{}[x: {}, y: {}, z: {}] in {}",
-                        player.getGameProfile().getName(),
-                        (int) player.getX(),
-                        (int) player.getY(),
-                        (int) player.getZ(),
-                        player.getWorld().getDimensionEntry().getIdAsString()
-                );
             });
         }
     }
