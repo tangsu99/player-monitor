@@ -5,6 +5,8 @@ import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+
 public class ParticleUtils {
     public static void drawLine(ServerWorld world, Vec3d start, Vec3d end, int points, int duration) {
         Vec3d[] linePoints = LineUtils.getPointsOnLine(start, end, points);
@@ -13,29 +15,65 @@ public class ParticleUtils {
         }
     }
 
-    public static void drawParticleBox(ServerWorld world, Vec3d point, int width, int height, int length, int points, int duration) {
-        Vec3d point1 = new Vec3d(point.x - (double) width / 2, point.y - (double) height / 2, point.z - (double) length / 2);
-        Vec3d point2 = new Vec3d(point.x + (double) width / 2, point.y - (double) height / 2, point.z - (double) length / 2);
-        Vec3d point3 = new Vec3d(point.x + (double) width / 2, point.y + (double) height / 2, point.z - (double) length / 2);
-        Vec3d point4 = new Vec3d(point.x - (double) width / 2, point.y + (double) height / 2, point.z - (double) length / 2);
-        Vec3d point5 = new Vec3d(point.x - (double) width / 2, point.y - (double) height / 2, point.z + (double) length / 2);
-        Vec3d point6 = new Vec3d(point.x + (double) width / 2, point.y - (double) height / 2, point.z + (double) length / 2);
-        Vec3d point7 = new Vec3d(point.x + (double) width / 2, point.y + (double) height / 2, point.z + (double) length / 2);
-        Vec3d point8 = new Vec3d(point.x - (double) width / 2, point.y + (double) height / 2, point.z + (double) length / 2);
+    public static void drawParticleBox(ServerWorld world, Vec3d point, int width, int height, int length, int quantity, int duration) {
+        ArrayList<Vec3d> points = new ArrayList<>();
+        points.add(new Vec3d(point.x - (double) width / 2, point.y - (double) height / 2, point.z - (double) length / 2));
+        points.add(new Vec3d(point.x + (double) width / 2, point.y - (double) height / 2, point.z - (double) length / 2));
+        points.add(new Vec3d(point.x + (double) width / 2, point.y + (double) height / 2, point.z - (double) length / 2));
+        points.add(new Vec3d(point.x - (double) width / 2, point.y + (double) height / 2, point.z - (double) length / 2));
+        points.add(new Vec3d(point.x - (double) width / 2, point.y - (double) height / 2, point.z + (double) length / 2));
+        points.add(new Vec3d(point.x + (double) width / 2, point.y - (double) height / 2, point.z + (double) length / 2));
+        points.add(new Vec3d(point.x + (double) width / 2, point.y + (double) height / 2, point.z + (double) length / 2));
+        points.add(new Vec3d(point.x - (double) width / 2, point.y + (double) height / 2, point.z + (double) length / 2));
 
-        drawLine(world, point1, point2, points, duration);
-        drawLine(world, point2, point3, points, duration);
-        drawLine(world, point3, point4, points, duration);
-        drawLine(world, point4, point1, points, duration);
+        drawParticleBox(world, points, quantity, duration);
+    }
 
-        drawLine(world, point5, point6, points, duration);
-        drawLine(world, point6, point7, points, duration);
-        drawLine(world, point7, point8, points, duration);
-        drawLine(world, point8, point5, points, duration);
+    public static void drawParticleBox(ServerWorld world, Vec3d start, Vec3d end, int quantity, int duration) {
+        ArrayList<Vec3d> points = new ArrayList<>();
+        double minX = Math.min(start.x, end.x);
+        double maxX = Math.max(start.x, end.x);
+        double minY = Math.min(start.y, end.y);
+        double maxY = Math.max(start.y, end.y);
+        double minZ = Math.min(start.z, end.z);
+        double maxZ = Math.max(start.z, end.z);
 
-        drawLine(world, point1, point5, points, duration);
-        drawLine(world, point2, point6, points, duration);
-        drawLine(world, point3, point7, points, duration);
-        drawLine(world, point4, point8, points, duration);
+        points.add(new Vec3d(minX, minY, minZ));
+        points.add(new Vec3d(minX, minY, maxZ));
+        points.add(new Vec3d(minX, maxY, minZ));
+        points.add(new Vec3d(minX, maxY, maxZ));
+        points.add(new Vec3d(maxX, minY, minZ));
+        points.add(new Vec3d(maxX, minY, maxZ));
+        points.add(new Vec3d(maxX, maxY, minZ));
+        points.add(new Vec3d(maxX, maxY, maxZ));
+
+        drawParticleBox(world, points, quantity, duration);
+    }
+
+    private static boolean drawParticleBox(ServerWorld world, ArrayList<Vec3d> points, int quantity, int duration) {
+        if (points.isEmpty()) {
+            return false;
+        }
+        if (points.size() == 8) {
+            drawLine(world, points.get(0), points.get(1), quantity, duration);
+            drawLine(world, points.get(1), points.get(2), quantity, duration);
+            drawLine(world, points.get(2), points.get(3), quantity, duration);
+            drawLine(world, points.get(3), points.get(0), quantity, duration);
+
+            drawLine(world, points.get(4), points.get(5), quantity, duration);
+            drawLine(world, points.get(5), points.get(6), quantity, duration);
+            drawLine(world, points.get(6), points.get(7), quantity, duration);
+            drawLine(world, points.get(7), points.get(4), quantity, duration);
+
+            drawLine(world, points.get(0), points.get(4), quantity, duration);
+            drawLine(world, points.get(1), points.get(5), quantity, duration);
+            drawLine(world, points.get(2), points.get(6), quantity, duration);
+            drawLine(world, points.get(3), points.get(7), quantity, duration);
+            return true;
+        }
+        else {
+            drawLine(world, points.getFirst(), points.get(7), quantity, duration);
+            return false;
+        }
     }
 }
