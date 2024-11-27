@@ -1,13 +1,16 @@
 package ink.fsp.playerMonitor.particle;
 
+import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.utils.LineUtils;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 
 public class ParticleUtils {
+    private static final Logger LOGGER = PlayerMonitor.LOGGER;
     public static void drawLine(ServerWorld world, Vec3d start, Vec3d end, int points, int duration) {
         Vec3d[] linePoints = LineUtils.getPointsOnLine(start, end, points);
         for (Vec3d point : linePoints) {
@@ -38,14 +41,14 @@ public class ParticleUtils {
         double minZ = Math.min(start.z, end.z);
         double maxZ = Math.max(start.z, end.z);
 
-        points.add(new Vec3d(minX, minY, minZ));
-        points.add(new Vec3d(minX, minY, maxZ));
-        points.add(new Vec3d(minX, maxY, minZ));
-        points.add(new Vec3d(minX, maxY, maxZ));
-        points.add(new Vec3d(maxX, minY, minZ));
-        points.add(new Vec3d(maxX, minY, maxZ));
-        points.add(new Vec3d(maxX, maxY, minZ));
-        points.add(new Vec3d(maxX, maxY, maxZ));
+        points.add(new Vec3d(minX, minY, minZ));    // 1
+        points.add(new Vec3d(minX, minY, maxZ));    // 2
+        points.add(new Vec3d(minX, maxY, maxZ));    // 4
+        points.add(new Vec3d(minX, maxY, minZ));    // 3
+        points.add(new Vec3d(maxX, minY, minZ));    // 5
+        points.add(new Vec3d(maxX, minY, maxZ));    // 6
+        points.add(new Vec3d(maxX, maxY, maxZ));    // 8
+        points.add(new Vec3d(maxX, maxY, minZ));    // 7
 
         drawParticleBox(world, points, quantity, duration);
     }

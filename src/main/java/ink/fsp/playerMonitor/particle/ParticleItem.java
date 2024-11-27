@@ -28,7 +28,7 @@ public class ParticleItem {
 
     public boolean spawnParticle() {
         if (tickCount++ < duration) {
-            if (tickCount % 20 == 0) {
+            if (tickCount % 5 == 0) {
                 world.spawnParticles(particleEffect, position.x, position.y, position.z, 1, 0, 0, 0, 0);
             }
             return true;
