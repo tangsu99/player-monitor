@@ -38,14 +38,15 @@ public class PlayerHoeEvent {
             if (playerSelectInterface.isSelectMode() && isSelectTool(player)) {
                 player.sendMessage(Text.of("select start: " + blockPos.toCenterPos().toString()));
                 playerSelectInterface.setSelectPositionStart(blockPos.toCenterPos());
-                ParticleManager.addParticle(new ParticleItem(player.getServer().getWorld(world.getRegistryKey()), blockPos.toCenterPos(), 10, new DustParticleEffect(DustParticleEffect.RED, 0.5F)));
+                ParticleManager.addParticle(new ParticleItem(player.getServer().getWorld(world.getRegistryKey()), blockPos.toCenterPos(), 10, new DustParticleEffect(DustParticleEffect.RED, 0.5F), true));
                 if (playerSelectInterface.getSelectPositionStart() != null && playerSelectInterface.getSelectPositionEnd() != null) {
                     ParticleUtils.drawParticleBox(
                             player.getServer().getWorld(world.getRegistryKey()),
                             playerSelectInterface.getSelectPositionStart(),
                             playerSelectInterface.getSelectPositionEnd(),
                             10,
-                            10
+                            10,
+                            true
                     );
                 }
             }
@@ -61,14 +62,15 @@ public class PlayerHoeEvent {
             if (playerSelectInterface.isSelectMode() && isSelectTool(player)) {
                 player.sendMessage(Text.of("select end: " + blockHitResult.getPos().toString()));
                 playerSelectInterface.setSelectPositionEnd(blockHitResult.getPos());
-                ParticleManager.addParticle(new ParticleItem(player.getServer().getWorld(world.getRegistryKey()), blockHitResult.getPos(), 10, new DustParticleEffect(DustParticleEffect.RED, 0.5F)));
+                ParticleManager.addParticle(new ParticleItem(player.getServer().getWorld(world.getRegistryKey()), blockHitResult.getPos(), 10, new DustParticleEffect(DustParticleEffect.RED, 0.5F), true));
                 if (playerSelectInterface.getSelectPositionStart() != null && playerSelectInterface.getSelectPositionEnd() != null) {
                     ParticleUtils.drawParticleBox(
                             player.getServer().getWorld(world.getRegistryKey()),
                             playerSelectInterface.getSelectPositionStart(),
                             playerSelectInterface.getSelectPositionEnd(),
                             10,
-                            10
+                            10,
+                            true
                     );
                 }
             }

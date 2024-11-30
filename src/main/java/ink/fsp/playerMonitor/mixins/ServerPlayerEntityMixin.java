@@ -8,30 +8,42 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin implements PlayerSelectInterface {
+    @Unique
     private boolean isSelectMode = false;
     @Unique
     private Vec3d startPos = null;
     @Unique
     private Vec3d endPos = null;
+    private boolean flag = false;
 
     @Override
     public void setSelectPositionStart(Vec3d pos) {
-        startPos = pos;
+        this.startPos = pos;
+    }
+
+    @Override
+    public void setFlag() {
+        this.flag = true;
+    }
+
+    @Override
+    public boolean getFlag() {
+        return this.flag;
     }
 
     @Override
     public Vec3d getSelectPositionStart() {
-        return startPos;
+        return this.startPos;
     }
 
     @Override
     public void setSelectPositionEnd(Vec3d pos) {
-        endPos = pos;
+        this.endPos = pos;
     }
 
     @Override
     public Vec3d getSelectPositionEnd() {
-        return endPos;
+        return this.endPos;
     }
 
     @Override
@@ -41,6 +53,6 @@ public abstract class ServerPlayerEntityMixin implements PlayerSelectInterface {
 
     @Override
     public boolean isSelectMode() {
-        return isSelectMode;
+        return this.isSelectMode;
     }
 }

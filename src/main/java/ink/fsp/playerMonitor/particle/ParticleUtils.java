@@ -11,14 +11,14 @@ import java.util.ArrayList;
 
 public class ParticleUtils {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
-    public static void drawLine(ServerWorld world, Vec3d start, Vec3d end, int points, int duration) {
+    public static void drawLine(ServerWorld world, Vec3d start, Vec3d end, int points, int duration, boolean flag) {
         Vec3d[] linePoints = LineUtils.getPointsOnLine(start, end, points);
         for (Vec3d point : linePoints) {
-            ParticleManager.addParticle(new ParticleItem(world, point, duration, new DustParticleEffect(DustParticleEffect.RED, 0.5F)));
+            ParticleManager.addParticle(new ParticleItem(world, point, duration, new DustParticleEffect(DustParticleEffect.RED, 0.5F), flag));
         }
     }
 
-    public static void drawParticleBox(ServerWorld world, Vec3d point, int width, int height, int length, int quantity, int duration) {
+    public static void drawParticleBox(ServerWorld world, Vec3d point, int width, int height, int length, int quantity, int duration, boolean flag) {
         ArrayList<Vec3d> points = new ArrayList<>();
         points.add(new Vec3d(point.x - (double) width / 2, point.y - (double) height / 2, point.z - (double) length / 2));
         points.add(new Vec3d(point.x + (double) width / 2, point.y - (double) height / 2, point.z - (double) length / 2));
@@ -29,10 +29,10 @@ public class ParticleUtils {
         points.add(new Vec3d(point.x + (double) width / 2, point.y + (double) height / 2, point.z + (double) length / 2));
         points.add(new Vec3d(point.x - (double) width / 2, point.y + (double) height / 2, point.z + (double) length / 2));
 
-        drawParticleBox(world, points, quantity, duration);
+        drawParticleBox(world, points, quantity, duration, flag);
     }
 
-    public static void drawParticleBox(ServerWorld world, Vec3d start, Vec3d end, int quantity, int duration) {
+    public static void drawParticleBox(ServerWorld world, Vec3d start, Vec3d end, int quantity, int duration, boolean flag) {
         ArrayList<Vec3d> points = new ArrayList<>();
         double minX = Math.min(start.x, end.x);
         double maxX = Math.max(start.x, end.x);
@@ -50,32 +50,32 @@ public class ParticleUtils {
         points.add(new Vec3d(maxX, maxY, maxZ));    // 8
         points.add(new Vec3d(maxX, maxY, minZ));    // 7
 
-        drawParticleBox(world, points, quantity, duration);
+        drawParticleBox(world, points, quantity, duration, flag);
     }
 
-    private static boolean drawParticleBox(ServerWorld world, ArrayList<Vec3d> points, int quantity, int duration) {
+    private static boolean drawParticleBox(ServerWorld world, ArrayList<Vec3d> points, int quantity, int duration, boolean flag) {
         if (points.isEmpty()) {
             return false;
         }
         if (points.size() == 8) {
-            drawLine(world, points.get(0), points.get(1), quantity, duration);
-            drawLine(world, points.get(1), points.get(2), quantity, duration);
-            drawLine(world, points.get(2), points.get(3), quantity, duration);
-            drawLine(world, points.get(3), points.get(0), quantity, duration);
+            drawLine(world, points.get(0), points.get(1), quantity, duration, flag);
+            drawLine(world, points.get(1), points.get(2), quantity, duration, flag);
+            drawLine(world, points.get(2), points.get(3), quantity, duration, flag);
+            drawLine(world, points.get(3), points.get(0), quantity, duration, flag);
 
-            drawLine(world, points.get(4), points.get(5), quantity, duration);
-            drawLine(world, points.get(5), points.get(6), quantity, duration);
-            drawLine(world, points.get(6), points.get(7), quantity, duration);
-            drawLine(world, points.get(7), points.get(4), quantity, duration);
+            drawLine(world, points.get(4), points.get(5), quantity, duration, flag);
+            drawLine(world, points.get(5), points.get(6), quantity, duration, flag);
+            drawLine(world, points.get(6), points.get(7), quantity, duration, flag);
+            drawLine(world, points.get(7), points.get(4), quantity, duration, flag);
 
-            drawLine(world, points.get(0), points.get(4), quantity, duration);
-            drawLine(world, points.get(1), points.get(5), quantity, duration);
-            drawLine(world, points.get(2), points.get(6), quantity, duration);
-            drawLine(world, points.get(3), points.get(7), quantity, duration);
+            drawLine(world, points.get(0), points.get(4), quantity, duration, flag);
+            drawLine(world, points.get(1), points.get(5), quantity, duration, flag);
+            drawLine(world, points.get(2), points.get(6), quantity, duration, flag);
+            drawLine(world, points.get(3), points.get(7), quantity, duration, flag);
             return true;
         }
         else {
-            drawLine(world, points.getFirst(), points.get(7), quantity, duration);
+            drawLine(world, points.getFirst(), points.getLast(), quantity, duration, flag);
             return false;
         }
     }

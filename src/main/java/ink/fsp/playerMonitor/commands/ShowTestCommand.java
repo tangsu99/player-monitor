@@ -35,28 +35,29 @@ public class ShowTestCommand {
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
         if (player != null) {
-            ArrayList<TracknItem> result = DatabaseManager.select(context.getArgument("player", String.class));
+            ArrayList<TracknItem> result = DatabaseManager.selectTrackn(context.getArgument("player", String.class));
             if (result != null && !result.isEmpty()) {
                 result.forEach(tracknItem -> {
 //                    source.sendMessage(
 //                            Text.literal(tracknItem.toString())
 //                    );
 //                    ParticleManager.addParticle(new ParticleItem(context.getSource().getServer().getOverworld(), new Vec3d(tracknItem.x, tracknItem.y, tracknItem.z), 10000));
-                    ParticleManager.addParticle(
-                            new ParticleItem(
-                                    context.getSource().getServer().getOverworld(),
-                                    new Vec3d(tracknItem.x, tracknItem.y, tracknItem.z),
-                                    10,
-                                    new DustParticleEffect(DustParticleEffect.RED, 1F)
-                            )
-                    );
+//                    ParticleManager.addParticle(
+//                            new ParticleItem(
+//                                    context.getSource().getServer().getOverworld(),
+//                                    new Vec3d(tracknItem.x, tracknItem.y, tracknItem.z),
+//                                    10,
+//                                    new DustParticleEffect(DustParticleEffect.RED, 1F)
+//                            )
+//                    );
                     ParticleUtils.drawParticleBox(
                             context.getSource().getServer().getOverworld(), context.getSource().getEntity().getPos(),
                             10,
                             10,
                             10,
                             10,
-                            10
+                            10,
+                            true
                     );
 //                    ParticleManager.spawnParticle(context.getSource().getServer().getOverworld(), tracknItem.x, tracknItem.y, tracknItem.z);
                 });
