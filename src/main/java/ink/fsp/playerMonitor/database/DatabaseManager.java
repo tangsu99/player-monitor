@@ -44,6 +44,16 @@ public class DatabaseManager {
                     "dimension VARCHAR, " +
                     "datetime INTEGER" +
                     ");");
+            statement.execute("CREATE TABLE players (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "playername VARCHAR NOT NULL, " +
+                    "X INT, " +
+                    "Y INT, " +
+                    "Z INT, " +
+                    "first_datetime INTEGER, " +
+                    "last_datetime INTEGER" +
+                    ");");
+            statement.close();
         } catch (SQLException e) {
 //            LOGGER.info("");
         }
@@ -61,7 +71,9 @@ public class DatabaseManager {
             statement.setInt(4, z);
             statement.setString(5, dimension);
             statement.setLong(6, datetime.getTime());
-            return statement.executeUpdate();
+            int result = statement.executeUpdate();
+            statement.close();
+            return result;
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
@@ -87,6 +99,7 @@ public class DatabaseManager {
                         )
                 );
             }
+            statement.close();
             return result;
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
