@@ -21,7 +21,7 @@ public class ShowSelectSubCmd {
 
     private static int showSelect(ServerCommandSource source, String player) {
         if (source.getPlayer() != null) {
-            source.sendFeedback(() -> Text.of(player), true);
+            source.sendFeedback(() -> Text.of(player), false);
             ParticleUtils.drawParticleBox(
                     source.getServer().getOverworld(), source.getEntity().getPos(),
                     10,
