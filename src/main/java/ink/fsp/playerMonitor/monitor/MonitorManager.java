@@ -9,7 +9,7 @@ public class MonitorManager {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
     public static final ArrayList<String> players = new ArrayList<>();
 
-    public void init() {
+    public static void init() {
         LOGGER.info("Database Initializing");
         players.add("tangsu99");
     }
