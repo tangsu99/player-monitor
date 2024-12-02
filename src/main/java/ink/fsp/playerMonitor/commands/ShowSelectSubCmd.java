@@ -5,10 +5,8 @@ import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.commands.arguments.PlayerArgumentType;
 import ink.fsp.playerMonitor.commands.suggestions.PlayerSuggestionProvider;
 import ink.fsp.playerMonitor.particle.ParticleUtils;
-import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
@@ -18,12 +16,12 @@ public class ShowSelectSubCmd {
          return CommandManager.literal("show")
                  .then(CommandManager.argument("player", new PlayerArgumentType())
                          .suggests(new PlayerSuggestionProvider())
-                         .executes(context -> showSelect(context.getSource(), EntityArgumentType.getPlayer(context, "player"))));
+                         .executes(context -> showSelect(context.getSource(), PlayerArgumentType.getPlayer(context, "player"))));
     }
 
-    private static int showSelect(ServerCommandSource source, ServerPlayerEntity player) {
+    private static int showSelect(ServerCommandSource source, String player) {
         if (source.getPlayer() != null) {
-            source.sendFeedback(() -> Text.of(player.getName()), true);
+            source.sendFeedback(() -> Text.of(player), true);
             ParticleUtils.drawParticleBox(
                     source.getServer().getOverworld(), source.getEntity().getPos(),
                     10,
