@@ -7,16 +7,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import ink.fsp.playerMonitor.monitor.MonitorManager;
-import net.minecraft.command.EntitySelector;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 public class PlayerArgumentType implements ArgumentType<String> {
     private static final Collection<String> EXAMPLES = MonitorManager.players;
+
+    public static String getPlayer(CommandContext<ServerCommandSource> context, String name) throws CommandSyntaxException {
+        return context.getArgument(name, String.class);
+    }
 
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
