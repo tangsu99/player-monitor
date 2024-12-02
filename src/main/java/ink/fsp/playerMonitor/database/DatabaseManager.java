@@ -106,4 +106,20 @@ public class DatabaseManager {
         }
         return null;
     }
+
+    public static int queryPlayersName(ArrayList<String> playersName) {
+        String sql = "SELECT playername FROM players;";
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                playersName.add(resultSet.getString(1));
+            }
+            statement.close();
+            return playersName.size();
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return 0;
+    }
 }

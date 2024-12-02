@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 public class PlayerSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) throws CommandSyntaxException {
-        for (String suggestion : MonitorManager.players) {
+        for (String suggestion : MonitorManager.playersName) {
             if (suggestion.startsWith(builder.getRemaining())) {
                 builder.suggest(suggestion);
             }
