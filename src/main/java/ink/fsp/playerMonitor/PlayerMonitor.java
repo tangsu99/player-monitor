@@ -2,8 +2,8 @@ package ink.fsp.playerMonitor;
 
 import ink.fsp.playerMonitor.commands.CommandsRegister;
 import ink.fsp.playerMonitor.database.DatabaseManager;
-import ink.fsp.playerMonitor.monitors.PlayerHoeEvent;
-import ink.fsp.playerMonitor.monitors.TickMonitor;
+import ink.fsp.playerMonitor.monitor.PlayerHoeEvent;
+import ink.fsp.playerMonitor.monitor.TickMonitor;
 import ink.fsp.playerMonitor.particle.ParticleManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
