@@ -10,6 +10,8 @@ public class CommandsRegister {
                 (dispatcher, registryAccess, environment) -> {
                     dispatcher.register(CommandManager
                             .literal("monitor")
+                            .executes(HelpSubCmd::exec)
+                            .then(HelpSubCmd.register())
                             .then(ShowSelectSubCmd.register())
                             .then(SelectModeSubCmd.register())
                     );
