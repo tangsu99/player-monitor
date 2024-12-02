@@ -1,8 +1,8 @@
 package ink.fsp.playerMonitor.commands;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import ink.fsp.playerMonitor.PlayerMonitor;
-import ink.fsp.playerMonitor.commands.arguments.PlayerArgumentType;
 import ink.fsp.playerMonitor.commands.suggestions.PlayerSuggestionProvider;
 import ink.fsp.playerMonitor.particle.ParticleUtils;
 import net.minecraft.server.command.CommandManager;
@@ -14,9 +14,9 @@ public class ShowSelectSubCmd {
     private final static Logger LOGGER = PlayerMonitor.LOGGER;
     public static LiteralArgumentBuilder<ServerCommandSource> register() {
          return CommandManager.literal("show")
-                 .then(CommandManager.argument("player", new PlayerArgumentType())
+                 .then(CommandManager.argument("player", StringArgumentType.string())
                          .suggests(new PlayerSuggestionProvider())
-                         .executes(context -> showSelect(context.getSource(), PlayerArgumentType.getPlayer(context, "player"))));
+                         .executes(context -> showSelect(context.getSource(), StringArgumentType.getString(context, "player"))));
     }
 
     private static int showSelect(ServerCommandSource source, String player) {
