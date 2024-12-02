@@ -1,4 +1,4 @@
-package ink.fsp.playerMonitor.monitors;
+package ink.fsp.playerMonitor.monitor;
 
 import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.database.DatabaseManager;

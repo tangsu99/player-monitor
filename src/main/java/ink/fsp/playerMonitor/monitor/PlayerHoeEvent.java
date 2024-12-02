@@ -1,4 +1,4 @@
-package ink.fsp.playerMonitor.monitors;
+package ink.fsp.playerMonitor.monitor;
 
 import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.particle.ParticleItem;
@@ -7,16 +7,12 @@ import ink.fsp.playerMonitor.particle.ParticleUtils;
 import ink.fsp.playerMonitor.utils.PlayerSelectInterface;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

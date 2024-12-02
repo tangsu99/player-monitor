@@ -1,4 +1,4 @@
-package ink.fsp.playerMonitor.monitors;
+package ink.fsp.playerMonitor.monitor;
 
 import ink.fsp.playerMonitor.events.PlayerMoveCallback;
 import net.minecraft.entity.player.PlayerEntity;
