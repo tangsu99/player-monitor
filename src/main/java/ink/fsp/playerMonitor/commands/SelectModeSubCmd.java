@@ -18,6 +18,10 @@ public class SelectModeSubCmd {
                 .executes(SelectModeSubCmd::exec);
     }
     private static int exec(CommandContext<ServerCommandSource> ctx){
+        if (ctx.getSource().getPlayer() != null) {
+            ctx.getSource().sendMessage(Text.of("此命令只能玩家执行"));
+            return 1;
+        }
         PlayerSelectInterface mode = (PlayerSelectInterface) ctx.getSource().getPlayer();
         if (mode != null) {
             mode.setSelectMode(!mode.isSelectMode());
