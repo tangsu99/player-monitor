@@ -8,13 +8,16 @@ public class CommandsRegister {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> ShowTestCommand.register(dispatcher));
         CommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess, environment) -> {
-                    dispatcher.register(CommandManager
-                            .literal("monitor")
-                            .executes(HelpSubCmd::exec)
-                            .then(HelpSubCmd.register())
-                            .then(ShowSelectSubCmd.register())
-                            .then(SelectModeSubCmd.register())
-                    );
+                    // 仅在服务器注册命令
+                    if (environment.dedicated) {
+                        dispatcher.register(CommandManager
+                                .literal("monitor")
+                                .executes(HelpSubCmd::exec)
+                                .then(HelpSubCmd.register())
+                                .then(ShowSelectSubCmd.register())
+                                .then(SelectModeSubCmd.register())
+                        );
+                    }
                 });
     }
 }
