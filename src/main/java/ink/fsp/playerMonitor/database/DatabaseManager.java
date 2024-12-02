@@ -45,7 +45,7 @@ public class DatabaseManager {
                     "datetime INTEGER" +
                     ");");
         } catch (SQLException e) {
-            LOGGER.info("Database Initialed");
+//            LOGGER.info("");
         }
         LOGGER.info("Database Initialed");
     }
