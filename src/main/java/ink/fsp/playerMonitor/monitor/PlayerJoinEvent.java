@@ -16,6 +16,6 @@ public class PlayerJoinEvent {
 
     private void onPlayReady(ServerPlayNetworkHandler handler, PacketSender packetSender, MinecraftServer minecraftServer) {
         LOGGER.info(handler.getPlayer().getName().getString());
-        MonitorManager.playersName.add(handler.getPlayer().getName().getString());
+        MonitorManager.addPlayer(handler.getPlayer());
     }
 }

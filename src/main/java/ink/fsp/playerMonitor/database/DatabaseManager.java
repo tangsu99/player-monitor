@@ -1,6 +1,7 @@
 package ink.fsp.playerMonitor.database;
 
 import ink.fsp.playerMonitor.PlayerMonitor;
+import ink.fsp.playerMonitor.database.ResultItem.PlayerItem;
 import ink.fsp.playerMonitor.database.ResultItem.TrackerItem;
 import org.slf4j.Logger;
 
@@ -142,6 +143,33 @@ public class DatabaseManager {
             LOGGER.error(e.getMessage());
         }
         return 0;
+    }
+
+    public static ArrayList<PlayerItem> selectPlayers() {
+        String sql = "SELECT * FROM players";
+        ArrayList<PlayerItem> result = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                result.add(
+                        PlayerItem.getPlayerItem(
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getInt(4),
+                                resultSet.getInt(5),
+                                resultSet.getInt(6),
+                                new Date(resultSet.getLong(7)),
+                                new Date(resultSet.getLong(8))
+                        )
+                );
+            }
+            statement.close();
+            return result;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            return result;
+        }
     }
 
     public static int UpdatePlayersByName(String playername, int x, int y, int z, Date lastDatetime) {
