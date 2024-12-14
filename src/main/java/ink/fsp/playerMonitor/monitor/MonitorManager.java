@@ -7,6 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,8 +26,14 @@ public class MonitorManager {
         UUID uuid = player.getGameProfile().getId();
         if (inPlayers(uuid)) {  // 在
             // 更新数据
+            DatabaseManager.UpdatePlayerNameByUuid(player.getGameProfile().getName(), uuid, new Date());
+            LOGGER.info("{}: {}", player.getGameProfile().getName(), player.getUuidAsString());
         }else {     // 不在
             // 写入数据库
+            PlayerItem playerItem = PlayerItem.getPlayerItem(player);
+            DatabaseManager.insertPlayers(playerItem);
+            players.add(playerItem);
+            LOGGER.info(playerItem.toString());
         }
     }
 
@@ -42,5 +49,14 @@ public class MonitorManager {
             }
         }
         return false;
+    }
+
+    public static UUID getUUID(String name) {
+        for (PlayerItem item : players) {
+            if (item.playername.equals(name)) {
+                return item.uuid;
+            }
+        }
+        return null;
     }
 }

@@ -17,7 +17,7 @@ public class TickMonitor implements ServerTickEvents.EndTick {
         if (ticks++ % 100 == 0) {
             minecraftServer.getPlayerManager().getPlayerList().forEach(player -> {
                 DatabaseManager.insertTrackn(
-                        player.getGameProfile().getName(),
+                        player.getGameProfile().getId(),
                         (int) player.getX(),
                         (int) player.getY(),
                         (int) player.getZ(),

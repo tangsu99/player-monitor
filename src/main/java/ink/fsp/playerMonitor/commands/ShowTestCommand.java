@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.database.DatabaseManager;
 import ink.fsp.playerMonitor.database.ResultItem.TrackerItem;
+import ink.fsp.playerMonitor.monitor.MonitorManager;
 import ink.fsp.playerMonitor.particle.ParticleItem;
 import ink.fsp.playerMonitor.particle.ParticleManager;
 import ink.fsp.playerMonitor.particle.ParticleUtils;
@@ -35,7 +36,8 @@ public class ShowTestCommand {
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
         if (player != null) {
-            ArrayList<TrackerItem> result = DatabaseManager.selectTrackn(context.getArgument("player", String.class));
+//            MonitorManager.getUUID(context.getArgument("player", String.class))
+            ArrayList<TrackerItem> result = DatabaseManager.selectTrackn(player.getUuid());
             if (result != null && !result.isEmpty()) {
                 result.forEach(tracknItem -> {
 //                    source.sendMessage(

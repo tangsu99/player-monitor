@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class DatabaseManager {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
@@ -45,12 +46,12 @@ public class DatabaseManager {
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE tracker (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "playername VARCHAR NOT NULL, " +
-                    "X INT, " +
-                    "Y INT, " +
-                    "Z INT, " +
-                    "dimension VARCHAR, " +
-                    "datetime INTEGER" +
+                    "player_uuid    VARCHAR NOT NULL," +
+                    "X NUMERIC NOT NULL, " +
+                    "Y NUMERIC NOT NULL, " +
+                    "Z NUMERIC NOT NULL, " +
+                    "dimension VARCHAR NOT NULL, " +
+                    "datetime INTEGER NOT NULL" +
                     ");");
             statement.close();
             return true;
@@ -64,13 +65,14 @@ public class DatabaseManager {
             Statement statement = connection.createStatement();
             statement.execute("create table players (" +
                     "    id             INTEGER primary key autoincrement," +
-                    "    playername     VARCHAR not null," +
-                    "    player_uuid    VARCHAR not null," +
-                    "    X              INT," +
-                    "    Y              INT," +
-                    "    Z              INT," +
-                    "    first_datetime INTEGER," +
-                    "    last_datetime  INTEGER" +
+                    "    playername     VARCHAR NOT NULL," +
+                    "    player_uuid    VARCHAR NOT NULL," +
+                    "    X              NUMERIC," +
+                    "    Y              NUMERIC," +
+                    "    Z              NUMERIC," +
+                    "    first_join_datetime INTEGER," +
+                    "    last_join_datetime  INTEGER," +
+                    "    last_leave_datetime  INTEGER" +
                     ");");
             statement.close();
             return true;
@@ -79,15 +81,15 @@ public class DatabaseManager {
         }
     }
 
-    public static int insertTrackn(String playername, int x, int y, int z, String dimension, Date datetime) {
-        String sql = "INSERT INTO tracker (playername, x, y, z, dimension, datetime) VALUES (?, ?, ?, ?, ?, ?)";
+    public static int insertTrackn(UUID playerUuid, double x, double y, double z, String dimension, Date datetime) {
+        String sql = "INSERT INTO tracker (player_uuid, x, y, z, dimension, datetime) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, playername);
-            statement.setInt(2, x);
-            statement.setInt(3, y);
-            statement.setInt(4, z);
+            statement.setString(1, playerUuid.toString());
+            statement.setDouble(2, x);
+            statement.setDouble(3, y);
+            statement.setDouble(4, z);
             statement.setString(5, dimension);
             statement.setLong(6, datetime.getTime());
             int result = statement.executeUpdate();
@@ -99,20 +101,20 @@ public class DatabaseManager {
         return 0;
     }
 
-    public static ArrayList<TrackerItem> selectTrackn(String playerName) {
-        String sql = "SELECT playername, x, y, z, dimension, datetime FROM tracker WHERE playername = ?";
+    public static ArrayList<TrackerItem> selectTrackn(UUID playerUuid) {
+        String sql = "SELECT player_uuid, x, y, z, dimension, datetime FROM tracker WHERE player_uuid = ?";
         ArrayList<TrackerItem> result = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, playerName);
+            statement.setString(1, playerUuid.toString());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 result.add(
                         TrackerItem.getTracknItem(
                                 resultSet.getString(1),
-                                resultSet.getInt(2),
-                                resultSet.getInt(3),
-                                resultSet.getInt(4),
+                                resultSet.getDouble(2),
+                                resultSet.getDouble(3),
+                                resultSet.getDouble(4),
                                 resultSet.getString(5),
                                 new Date(resultSet.getLong(6))
                         )
@@ -126,16 +128,18 @@ public class DatabaseManager {
         return null;
     }
 
-    public static int insertPlayers(String playername, int x, int y, int z, Date firstDatetime, Date lastDatetime) {
-        String sql = "INSERT INTO players (playername, x, y, z, first_datetime, last_datetime) VALUES (?, ?, ?, ?, ?, ?)";
+    public static int insertPlayers(PlayerItem playerItem) {
+        String sql = "INSERT INTO players (playername, player_uuid, x, y, z, first_join_datetime, last_join_datetime, last_leave_datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, playername);
-            statement.setInt(2, x);
-            statement.setInt(3, y);
-            statement.setInt(4, z);
-            statement.setLong(5, firstDatetime.getTime());
-            statement.setLong(6, lastDatetime.getTime());
+            statement.setString(1, playerItem.playername);
+            statement.setString(2, playerItem.uuid.toString());
+            statement.setDouble(3, playerItem.x);
+            statement.setDouble(4, playerItem.y);
+            statement.setDouble(5, playerItem.z);
+            statement.setLong(6, playerItem.firstJoinDatetime.getTime());
+            statement.setLong(7, playerItem.lastJoinDatetime.getTime());
+            statement.setLong(8, playerItem.lastLeaveDatetime.getTime());
             int result = statement.executeUpdate();
             statement.close();
             return result;
@@ -156,11 +160,12 @@ public class DatabaseManager {
                         PlayerItem.getPlayerItem(
                                 resultSet.getString(2),
                                 resultSet.getString(3),
-                                resultSet.getInt(4),
-                                resultSet.getInt(5),
-                                resultSet.getInt(6),
+                                resultSet.getDouble(4),
+                                resultSet.getDouble(5),
+                                resultSet.getDouble(6),
                                 new Date(resultSet.getLong(7)),
-                                new Date(resultSet.getLong(8))
+                                new Date(resultSet.getLong(8)),
+                                new Date(resultSet.getLong(9))
                         )
                 );
             }
@@ -172,15 +177,31 @@ public class DatabaseManager {
         }
     }
 
-    public static int UpdatePlayersByName(String playername, int x, int y, int z, Date lastDatetime) {
-        String sql = "UPDATE players SET x=?, y=?, z=?, last_datetime=? WHERE playername=?";
+    public static int UpdatePlayerLastByUuid(UUID playerUuid, double x, double y, double z, Date lastDatetime) {
+        String sql = "UPDATE players SET x=?, y=?, z=?, last_leave_datetime=? WHERE player_uuid=?";
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, x);
-            statement.setInt(2, y);
-            statement.setInt(3, z);
+            statement.setDouble(1, x);
+            statement.setDouble(2, y);
+            statement.setDouble(3, z);
             statement.setLong(4, lastDatetime.getTime());
-            statement.setString(5, playername);
+            statement.setString(5, playerUuid.toString());
+            int result = statement.executeUpdate();
+            statement.close();
+            return result;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return 0;
+    }
+
+    public static int UpdatePlayerNameByUuid(String playerName, UUID playerUuid, Date lastDatetime) {
+        String sql = "UPDATE players SET playername=?, first_join_datetime=? WHERE player_uuid=?";
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, playerName);
+            statement.setLong(2, lastDatetime.getTime());
+            statement.setString(3, playerUuid.toString());
             int result = statement.executeUpdate();
             statement.close();
             return result;
