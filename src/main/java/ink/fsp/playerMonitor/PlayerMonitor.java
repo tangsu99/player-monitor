@@ -2,10 +2,8 @@ package ink.fsp.playerMonitor;
 
 import ink.fsp.playerMonitor.commands.CommandsRegister;
 import ink.fsp.playerMonitor.database.DatabaseManager;
-import ink.fsp.playerMonitor.monitor.MonitorManager;
-import ink.fsp.playerMonitor.monitor.PlayerHoeEvent;
-import ink.fsp.playerMonitor.monitor.PlayerConnectionEvents;
-import ink.fsp.playerMonitor.monitor.TickMonitor;
+import ink.fsp.playerMonitor.events.PlayerMoveCallback;
+import ink.fsp.playerMonitor.monitor.*;
 import ink.fsp.playerMonitor.particle.ParticleManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -22,7 +20,7 @@ public class PlayerMonitor implements ModInitializer {
         DatabaseManager.init();
         MonitorManager.init();
 //        PlayerMoveCallback.EVENT.register(new ConstantlyMonitor());
-//        PlayerMoveCallback.EVENT.register(new RegionMonitor());
+        PlayerMoveCallback.EVENT.register(new RegionMonitor());
         ServerTickEvents.END_SERVER_TICK.register(new TickMonitor());
         ServerTickEvents.END_SERVER_TICK.register(new ParticleManager());
         new PlayerHoeEvent().register();

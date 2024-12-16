@@ -3,6 +3,7 @@ package ink.fsp.playerMonitor.monitor;
 import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.database.DatabaseManager;
 import ink.fsp.playerMonitor.database.ResultItem.PlayerItem;
+import ink.fsp.playerMonitor.database.ResultItem.RegionItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class MonitorManager {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
     public static ArrayList<PlayerItem> players = new ArrayList<>();
+    public static ArrayList<RegionItem> regions = new ArrayList<>();
 
     public static void init() {
         LOGGER.info("Monitor Initializing");
@@ -35,6 +37,14 @@ public class MonitorManager {
             players.add(playerItem);
             LOGGER.info(playerItem.toString());
         }
+    }
+
+    public static void addRegions(RegionItem regionItem) {
+        // 写入数据库
+//        PlayerItem playerItem = PlayerItem.getPlayerItem(regionItem);
+//        DatabaseManager.insertPlayers(playerItem);
+//        players.add(playerItem);
+//        LOGGER.info(playerItem.toString());
     }
 
     // 返回所有在数据库的玩家的玩家名
