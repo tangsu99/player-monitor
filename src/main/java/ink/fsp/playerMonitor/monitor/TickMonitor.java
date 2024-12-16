@@ -15,16 +15,14 @@ public class TickMonitor implements ServerTickEvents.EndTick {
     @Override
     public void onEndTick(MinecraftServer minecraftServer) {
         if (ticks++ % 100 == 0) {
-            minecraftServer.getPlayerManager().getPlayerList().forEach(player -> {
-                DatabaseManager.insertTrackn(
-                        player.getGameProfile().getId(),
-                        (int) player.getX(),
-                        (int) player.getY(),
-                        (int) player.getZ(),
-                        player.getWorld().getDimensionEntry().getIdAsString(),
-                        new Date()
-                );
-            });
+            minecraftServer.getPlayerManager().getPlayerList().forEach(player -> DatabaseManager.insertTrackn(
+                    player.getGameProfile().getId(),
+                    player.getX(),
+                    player.getY(),
+                    player.getZ(),
+                    player.getWorld().getDimensionEntry().getIdAsString(),
+                    new Date()
+            ));
         }
     }
 }
