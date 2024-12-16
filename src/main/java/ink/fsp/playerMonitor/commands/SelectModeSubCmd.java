@@ -25,8 +25,12 @@ public class SelectModeSubCmd {
                                         .executes(context -> commit(context.getSource(), StringArgumentType.getString(context, "name"), StringArgumentType.getString(context, "comments")))
                                 )
                         )
-                );
+                )
+                .then(CommandManager.literal("clear").executes(SelectModeSubCmd::clear));
     }
+
+
+
     private static int exec(CommandContext<ServerCommandSource> ctx){
         if (ctx.getSource().getPlayer() == null) {
             ctx.getSource().sendMessage(Text.of("此命令只能玩家执行"));
@@ -55,12 +59,15 @@ public class SelectModeSubCmd {
             return 1;
         }
         source.sendMessage(Text.of("name: " + name + "; comments: " + (comments == null ? "" : comments)));
-//        if (ps.isSelectMode()) {
-//            source.getPlayer().sendMessage(Text.of("Selected mode on"));
-//        }else {
-//            source.getPlayer().sendMessage(Text.of("Selected mode off"));
-//        }
-//        ps.setSelectMode(!ps.isSelectMode());
+        return 1;
+    }
+
+    private static int clear(CommandContext<ServerCommandSource> ctx) {
+        if (ctx.getSource().getPlayer() != null) {
+            PlayerSelectInterface ps = (PlayerSelectInterface) ctx.getSource().getPlayer();
+            ps.setSelectPositionStart(null);
+            ps.setSelectPositionEnd(null);
+        }
         return 1;
     }
 }
