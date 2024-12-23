@@ -1,5 +1,8 @@
 package ink.fsp.playerMonitor.utils;
 
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.world.World;
+
 public class DimensionTranslation {
     public static String translation(String id) {
         switch (id) {
@@ -8,5 +11,8 @@ public class DimensionTranslation {
             case "minecraft:the_end": return "末地";
             default: return id;
         }
+    }
+    public static String translation(RegistryKey<World> key) {
+        return translation(key.getValue().toString());
     }
 }

@@ -2,7 +2,9 @@ package ink.fsp.playerMonitor.database;
 
 import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.database.ResultItem.PlayerItem;
+import ink.fsp.playerMonitor.database.ResultItem.RegionItem;
 import ink.fsp.playerMonitor.database.ResultItem.TrackerItem;
+import net.minecraft.util.math.Vec3d;
 import org.slf4j.Logger;
 
 import java.sql.*;
@@ -30,10 +32,11 @@ public class DatabaseManager {
 
     public static void setupDatabase() {
         Connection connection;
-        try {
+        try { // 待优化
             connection = DriverManager.getConnection(DATABASE_URL);
             createTrackerTable(connection);
             createPlayersTable(connection);
+            createRegionsTable(connection);
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -77,6 +80,32 @@ public class DatabaseManager {
             statement.close();
             return true;
         } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    private static boolean createRegionsTable(Connection connection) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("create table regions (" +
+                    "id              INTEGER primary key autoincrement," +
+                    "region_name     VARCHAR NOT NULL," +
+                    "created_by      VARCHAR NOT NULL," +
+                    "create_datetime INTEGER NOT NULL," +
+                    "dimension       VARCHAR NOT NULL," +
+                    "start_x         NUMERIC," +
+                    "start_y         NUMERIC," +
+                    "start_z         NUMERIC," +
+                    "end_x           NUMERIC," +
+                    "end_y           NUMERIC," +
+                    "end_z           NUMERIC" +
+                    ");");
+            statement.close();
+            LOGGER.info("regions 创建成功");
+            return true;
+        } catch (SQLException e) {
+            LOGGER.warn("regions 创建错误");
+            LOGGER.warn(e.getMessage());
             return false;
         }
     }
@@ -225,5 +254,65 @@ public class DatabaseManager {
             LOGGER.error(e.getMessage());
         }
         return 0;
+    }
+
+    public static int insertRegion(RegionItem regionItem) {
+        String sql = "INSERT INTO regions (" +
+                "region_name, created_by, create_datetime, dimension, start_x, start_y, start_z, end_x, end_y, end_z)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, regionItem.regionName);
+            statement.setString(2, regionItem.createdBy);
+            statement.setLong(3, regionItem.createdOn.getTime());
+            statement.setString(4, regionItem.world);
+            statement.setDouble(5, regionItem.start.x);
+            statement.setDouble(6, regionItem.start.y);
+            statement.setDouble(7, regionItem.start.z);
+            statement.setDouble(8, regionItem.end.x);
+            statement.setDouble(9, regionItem.end.y);
+            statement.setDouble(10, regionItem.end.z);
+            int result = statement.executeUpdate();
+            statement.close();
+            return result;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return 0;
+    }
+
+    public static ArrayList<RegionItem> selectRegions() {
+        String sql = "SELECT * FROM regions";
+        ArrayList<RegionItem> result = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                result.add(
+                        RegionItem.getRegionItem(
+                                new Vec3d(
+                                        resultSet.getDouble(6),
+                                        resultSet.getDouble(7),
+                                        resultSet.getDouble(8)
+                                ),
+                                new Vec3d(
+                                        resultSet.getDouble(9),
+                                        resultSet.getDouble(10),
+                                        resultSet.getDouble(11)
+                                ),
+                                resultSet.getString(5),
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getDate(4)
+                        )
+                );
+            }
+            statement.close();
+            return result;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            return result;
+        }
     }
 }

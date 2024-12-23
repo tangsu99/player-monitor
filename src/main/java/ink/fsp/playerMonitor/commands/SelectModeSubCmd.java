@@ -4,6 +4,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import ink.fsp.playerMonitor.PlayerMonitor;
+import ink.fsp.playerMonitor.database.ResultItem.RegionItem;
+import ink.fsp.playerMonitor.monitor.MonitorManager;
+import ink.fsp.playerMonitor.utils.DimensionTranslation;
 import ink.fsp.playerMonitor.utils.PlayerSelectInterface;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -53,13 +56,22 @@ public class SelectModeSubCmd {
             source.sendMessage(Text.of("此命令只能玩家执行"));
             return 1;
         }
-        PlayerSelectInterface ps = (PlayerSelectInterface) source.getPlayer();
         if (name == null || name.isEmpty()) {
             source.sendMessage(Text.of("<name> field is empty"));
             return 1;
         }
+        PlayerSelectInterface ps = (PlayerSelectInterface) source.getPlayer();
         source.sendMessage(Text.of("name: " + name + "; comments: " + (comments == null ? "" : comments)));
-        return 1;
+        return MonitorManager
+                .addRegions(
+                        RegionItem.getRegionItem(
+                                ps.getSelectPositionStart(),
+                                ps.getSelectPositionEnd(),
+                                source.getPlayer().getWorld().getRegistryKey().getValue().toString(),
+                                name,
+                                source.getPlayer().getGameProfile().getName()
+                        )
+                );
     }
 
     private static int clear(CommandContext<ServerCommandSource> ctx) {

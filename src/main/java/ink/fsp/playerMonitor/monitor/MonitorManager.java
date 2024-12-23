@@ -22,6 +22,8 @@ public class MonitorManager {
         LOGGER.info("Monitor Initializing");
         // 启动先查玩家数据
         players = DatabaseManager.selectPlayers();
+        // 查区域
+        regions = DatabaseManager.selectRegions();
     }
 
     public static void addPlayer(ServerPlayerEntity player) {
@@ -39,12 +41,12 @@ public class MonitorManager {
         }
     }
 
-    public static void addRegions(RegionItem regionItem) {
+    public static int addRegions(RegionItem regionItem) {
         // 写入数据库
-//        PlayerItem playerItem = PlayerItem.getPlayerItem(regionItem);
-//        DatabaseManager.insertPlayers(playerItem);
-//        players.add(playerItem);
-//        LOGGER.info(playerItem.toString());
+        var result = DatabaseManager.insertRegion(regionItem);
+        regions.add(regionItem);
+        LOGGER.info(regionItem.toString());
+        return result;
     }
 
     // 返回所有在数据库的玩家的玩家名

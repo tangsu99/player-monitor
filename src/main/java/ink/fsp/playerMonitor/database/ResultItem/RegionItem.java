@@ -23,4 +23,7 @@ public class RegionItem {
     public static RegionItem getRegionItem(Vec3d start, Vec3d end, String world, String regionName, String createdBy) {
         return new RegionItem(start, end, world, regionName, createdBy, new Date());
     }
+    public static RegionItem getRegionItem(Vec3d start, Vec3d end, String world, String regionName, String createdBy, Date createdOn) {
+        return new RegionItem(start, end, world, regionName, createdBy, createdOn);
+    }
 }
