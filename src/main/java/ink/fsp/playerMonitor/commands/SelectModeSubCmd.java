@@ -6,8 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.database.ResultItem.RegionItem;
 import ink.fsp.playerMonitor.monitor.MonitorManager;
-import ink.fsp.playerMonitor.utils.DimensionTranslation;
-import ink.fsp.playerMonitor.utils.PlayerSelectInterface;
+import ink.fsp.playerMonitor.utils.PlayerFlagInterface;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -39,7 +38,7 @@ public class SelectModeSubCmd {
             ctx.getSource().sendMessage(Text.of("此命令只能玩家执行"));
             return 1;
         }
-        PlayerSelectInterface mode = (PlayerSelectInterface) ctx.getSource().getPlayer();
+        PlayerFlagInterface mode = (PlayerFlagInterface) ctx.getSource().getPlayer();
         if (mode != null) {
             mode.setSelectMode(!mode.isSelectMode());
             if (mode.isSelectMode()) {
@@ -60,7 +59,7 @@ public class SelectModeSubCmd {
             source.sendMessage(Text.of("<name> field is empty"));
             return 1;
         }
-        PlayerSelectInterface ps = (PlayerSelectInterface) source.getPlayer();
+        PlayerFlagInterface ps = (PlayerFlagInterface) source.getPlayer();
         source.sendMessage(Text.of("name: " + name + "; comments: " + (comments == null ? "" : comments)));
         return MonitorManager
                 .addRegions(
@@ -76,7 +75,7 @@ public class SelectModeSubCmd {
 
     private static int clear(CommandContext<ServerCommandSource> ctx) {
         if (ctx.getSource().getPlayer() != null) {
-            PlayerSelectInterface ps = (PlayerSelectInterface) ctx.getSource().getPlayer();
+            PlayerFlagInterface ps = (PlayerFlagInterface) ctx.getSource().getPlayer();
             ps.setSelectPositionStart(null);
             ps.setSelectPositionEnd(null);
         }

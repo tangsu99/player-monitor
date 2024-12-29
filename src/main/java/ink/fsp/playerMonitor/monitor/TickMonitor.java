@@ -23,6 +23,7 @@ public class TickMonitor implements ServerTickEvents.EndTick {
                     player.getWorld().getDimensionEntry().getIdAsString(),
                     new Date()
             ));
+            ticks = 0;
         }
     }
 }

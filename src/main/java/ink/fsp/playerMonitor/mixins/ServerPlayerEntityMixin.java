@@ -1,20 +1,25 @@
 package ink.fsp.playerMonitor.mixins;
 
-import ink.fsp.playerMonitor.utils.PlayerSelectInterface;
+import ink.fsp.playerMonitor.database.ResultItem.RegionItem;
+import ink.fsp.playerMonitor.utils.PlayerFlagInterface;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin implements PlayerSelectInterface {
+public abstract class ServerPlayerEntityMixin implements PlayerFlagInterface {
     @Unique
     private boolean isSelectMode = false;
     @Unique
     private Vec3d startPos = null;
     @Unique
     private Vec3d endPos = null;
+    @Unique
     private boolean flag = false;
+    @Unique
+    private RegionItem regionItem = null;
+
 
     @Override
     public void setSelectPositionStart(Vec3d pos) {
@@ -54,5 +59,15 @@ public abstract class ServerPlayerEntityMixin implements PlayerSelectInterface {
     @Override
     public boolean isSelectMode() {
         return this.isSelectMode;
+    }
+
+    @Override
+    public void setRegion(RegionItem region) {
+        this.regionItem = region;
+    }
+
+    @Override
+    public RegionItem getRegion() {
+        return this.regionItem;
     }
 }

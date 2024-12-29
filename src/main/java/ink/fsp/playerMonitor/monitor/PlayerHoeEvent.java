@@ -4,7 +4,7 @@ import ink.fsp.playerMonitor.PlayerMonitor;
 import ink.fsp.playerMonitor.particle.ParticleItem;
 import ink.fsp.playerMonitor.particle.ParticleManager;
 import ink.fsp.playerMonitor.particle.ParticleUtils;
-import ink.fsp.playerMonitor.utils.PlayerSelectInterface;
+import ink.fsp.playerMonitor.utils.PlayerFlagInterface;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,16 +30,16 @@ public class PlayerHoeEvent {
 
     private ActionResult onLeftClickBlock(PlayerEntity player, World world, Hand hand, BlockPos blockPos, Direction direction) {
         if (!world.isClient()) {
-            PlayerSelectInterface playerSelectInterface = (PlayerSelectInterface) player;
-            if (playerSelectInterface.isSelectMode() && isSelectTool(player)) {
+            PlayerFlagInterface playerFlagInterface = (PlayerFlagInterface) player;
+            if (playerFlagInterface.isSelectMode() && isSelectTool(player)) {
                 player.sendMessage(Text.of("select start: " + blockPos.toCenterPos().toString()));
-                playerSelectInterface.setSelectPositionStart(blockPos.toCenterPos());
+                playerFlagInterface.setSelectPositionStart(blockPos.toCenterPos());
                 ParticleManager.addParticle(new ParticleItem(player.getServer().getWorld(world.getRegistryKey()), blockPos.toCenterPos(), 10, new DustParticleEffect(DustParticleEffect.RED, 0.5F), true));
-                if (playerSelectInterface.getSelectPositionStart() != null && playerSelectInterface.getSelectPositionEnd() != null) {
+                if (playerFlagInterface.getSelectPositionStart() != null && playerFlagInterface.getSelectPositionEnd() != null) {
                     ParticleUtils.drawParticleBox(
                             player.getServer().getWorld(world.getRegistryKey()),
-                            playerSelectInterface.getSelectPositionStart(),
-                            playerSelectInterface.getSelectPositionEnd(),
+                            playerFlagInterface.getSelectPositionStart(),
+                            playerFlagInterface.getSelectPositionEnd(),
                             10,
                             10,
                             true
@@ -54,16 +54,16 @@ public class PlayerHoeEvent {
 
     private ActionResult onRightClickBlock(PlayerEntity player, World world, Hand hand, BlockHitResult blockHitResult) {
         if (!world.isClient()) {
-            PlayerSelectInterface playerSelectInterface = (PlayerSelectInterface) player;
-            if (playerSelectInterface.isSelectMode() && isSelectTool(player)) {
+            PlayerFlagInterface playerFlagInterface = (PlayerFlagInterface) player;
+            if (playerFlagInterface.isSelectMode() && isSelectTool(player)) {
                 player.sendMessage(Text.of("select end: " + blockHitResult.getPos().toString()));
-                playerSelectInterface.setSelectPositionEnd(blockHitResult.getPos());
+                playerFlagInterface.setSelectPositionEnd(blockHitResult.getPos());
                 ParticleManager.addParticle(new ParticleItem(player.getServer().getWorld(world.getRegistryKey()), blockHitResult.getPos(), 10, new DustParticleEffect(DustParticleEffect.RED, 0.5F), true));
-                if (playerSelectInterface.getSelectPositionStart() != null && playerSelectInterface.getSelectPositionEnd() != null) {
+                if (playerFlagInterface.getSelectPositionStart() != null && playerFlagInterface.getSelectPositionEnd() != null) {
                     ParticleUtils.drawParticleBox(
                             player.getServer().getWorld(world.getRegistryKey()),
-                            playerSelectInterface.getSelectPositionStart(),
-                            playerSelectInterface.getSelectPositionEnd(),
+                            playerFlagInterface.getSelectPositionStart(),
+                            playerFlagInterface.getSelectPositionEnd(),
                             10,
                             10,
                             true

@@ -45,7 +45,6 @@ public class MonitorManager {
         // 写入数据库
         var result = DatabaseManager.insertRegion(regionItem);
         regions.add(regionItem);
-        LOGGER.info(regionItem.toString());
         return result;
     }
 

@@ -2,6 +2,7 @@ package ink.fsp.playerMonitor;
 
 import ink.fsp.playerMonitor.commands.CommandsRegister;
 import ink.fsp.playerMonitor.database.DatabaseManager;
+import ink.fsp.playerMonitor.events.EventsRegister;
 import ink.fsp.playerMonitor.events.PlayerMoveCallback;
 import ink.fsp.playerMonitor.monitor.*;
 import ink.fsp.playerMonitor.particle.ParticleManager;
@@ -25,6 +26,7 @@ public class PlayerMonitor implements ModInitializer {
         ServerTickEvents.END_SERVER_TICK.register(new ParticleManager());
         new PlayerHoeEvent().register();
         new PlayerConnectionEvents().register();
+        EventsRegister.register();
         CommandsRegister.registerCommands();
 
     }
