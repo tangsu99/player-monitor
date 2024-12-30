@@ -21,7 +21,7 @@ public class RegionMonitor implements PlayerMoveCallback {
         for(var r : MonitorManager.regions) {
             PlayerFlagInterface playerFlagInterface = (PlayerFlagInterface) player;
             // 判断是否进入某区域
-            if (Vec3dUtils.isPointInRange(player.getPos(), r.start, r.end)) {
+            if (Vec3dUtils.isPointInRange(player.getPos(), r.start, r.end) && r.regionName.equals(player.getWorld().getDimensionEntry().getIdAsString())) {
                 if (playerFlagInterface.getRegion() == null) {
                     playerFlagInterface.setRegion(r);
                     PlayerJoinRegionCallback.EVENT.invoker().onPlayerJoinRegion(player, r);
