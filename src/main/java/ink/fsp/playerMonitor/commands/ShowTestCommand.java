@@ -37,9 +37,9 @@ public class ShowTestCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player != null) {
 //            MonitorManager.getUUID(context.getArgument("player", String.class))
-            ArrayList<TrackerItem> result = DatabaseManager.selectTrackn(player.getUuid());
-            if (result != null && !result.isEmpty()) {
-                result.forEach(tracknItem -> {
+//            ArrayList<TrackerItem> result = DatabaseManager.selectTrackn(player.getUuid());
+//            if (result != null && !result.isEmpty()) {
+//                result.forEach(tracknItem -> {
 //                    source.sendMessage(
 //                            Text.literal(tracknItem.toString())
 //                    );
@@ -52,18 +52,18 @@ public class ShowTestCommand {
 //                                    new DustParticleEffect(DustParticleEffect.RED, 1F)
 //                            )
 //                    );
-                    ParticleUtils.drawParticleBox(
-                            context.getSource().getServer().getOverworld(), context.getSource().getEntity().getPos(),
-                            10,
-                            10,
-                            10,
-                            10,
-                            10,
-                            true
-                    );
+//                    ParticleUtils.drawParticleBox(
+//                            context.getSource().getServer().getOverworld(), context.getSource().getEntity().getPos(),
+//                            10,
+//                            10,
+//                            10,
+//                            10,
+//                            10,
+//                            true
+//                    );
 //                    ParticleManager.spawnParticle(context.getSource().getServer().getOverworld(), tracknItem.x, tracknItem.y, tracknItem.z);
-                });
-            }
+//                });
+//            }
         }
         return 1;
     }

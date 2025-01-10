@@ -6,14 +6,16 @@ import java.util.Date;
 
 public class TrackerItem {
     public String playername;
+    public String regionName;
     public double x;
     public double y;
     public double z;
     public String dimension;
     public Date datetime;
 
-    public TrackerItem(String playername, double x, double y, double z, String dimension, Date datetime) {
+    public TrackerItem(String playername, String regionName, double x, double y, double z, String dimension, Date datetime) {
         this.playername = playername;
+        this.regionName = regionName;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -21,8 +23,8 @@ public class TrackerItem {
         this.datetime = datetime;
     }
 
-    public static TrackerItem getTracknItem(String playername, double x, double y, double z, String dimension, Date datetime) {
-        return new TrackerItem(playername, x, y, z, dimension, datetime);
+    public static TrackerItem getTracknItem(String playername, String regionName, double x, double y, double z, String dimension, Date datetime) {
+        return new TrackerItem(playername, regionName, x, y, z, dimension, datetime);
     }
 
     @Override

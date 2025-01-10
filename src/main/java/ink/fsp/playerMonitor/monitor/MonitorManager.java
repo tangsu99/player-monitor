@@ -53,6 +53,10 @@ public class MonitorManager {
         return players.stream().map((item) -> item.playername).distinct().collect(Collectors.toList());
     }
 
+    public static List<String> getRegionName() {
+        return regions.stream().map((item) -> item.regionName).distinct().collect(Collectors.toList());
+    }
+
     private static boolean inPlayers(UUID uuid) {
         for (PlayerItem item : players) {
             if (item.uuid.equals(uuid)) {

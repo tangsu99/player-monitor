@@ -49,8 +49,8 @@ public class DatabaseManager {
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE tracker (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "player_uuid    VARCHAR NOT NULL," +
-                    "region_name VARCHAR NOT NULL, " +
+                    "player_name    VARCHAR NOT NULL," +
+                    "region_name    VARCHAR NOT NULL, " +
                     "X NUMERIC NOT NULL, " +
                     "Y NUMERIC NOT NULL, " +
                     "Z NUMERIC NOT NULL, " +
@@ -111,12 +111,12 @@ public class DatabaseManager {
         }
     }
 
-    public static int insertTrackn(UUID playerUuid, String regionName, double x, double y, double z, String dimension, Date datetime) {
-        String sql = "INSERT INTO tracker (player_uuid, region_name, x, y, z, dimension, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static int insertTrackn(String playerName, String regionName, double x, double y, double z, String dimension, Date datetime) {
+        String sql = "INSERT INTO tracker (player_name, region_name, x, y, z, dimension, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, playerUuid.toString());
+            statement.setString(1, playerName);
             statement.setString(2, regionName);
             statement.setDouble(3, x);
             statement.setDouble(4, y);
@@ -132,22 +132,26 @@ public class DatabaseManager {
         return 0;
     }
 
-    public static ArrayList<TrackerItem> selectTrackn(UUID playerUuid) {
-        String sql = "SELECT player_uuid, x, y, z, dimension, datetime FROM tracker WHERE player_uuid = ?";
+    public static ArrayList<TrackerItem> selectTrackn(String playerName, String regionName, Date currentTime, Date targetTime) {
+        String sql = "SELECT player_name, region_name, x, y, z, dimension, datetime FROM tracker WHERE player_name = ? AND region_name = ? AND datetime BETWEEN ? AND ?";
         ArrayList<TrackerItem> result = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, playerUuid.toString());
+            statement.setString(1, playerName);
+            statement.setString(2, regionName);
+            statement.setDouble(3, targetTime.getTime());
+            statement.setDouble(4, currentTime.getTime());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 result.add(
                         TrackerItem.getTracknItem(
                                 resultSet.getString(1),
-                                resultSet.getDouble(2),
+                                resultSet.getString(2),
                                 resultSet.getDouble(3),
                                 resultSet.getDouble(4),
-                                resultSet.getString(5),
-                                new Date(resultSet.getLong(6))
+                                resultSet.getDouble(5),
+                                resultSet.getString(6),
+                                new Date(resultSet.getLong(7))
                         )
                 );
             }
