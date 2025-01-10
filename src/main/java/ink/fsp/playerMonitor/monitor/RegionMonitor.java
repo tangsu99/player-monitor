@@ -12,13 +12,23 @@ import net.minecraft.world.World;
 import org.slf4j.Logger;
 
 public class RegionMonitor implements PlayerMoveCallback {
-    private int ticks = 0;
+    private long ticks = 0;
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
 
 
     @Override
     public ActionResult onPlayerMove(PlayerEntity player, World world) {
+        if(player.getServer()==null) {
+            return ActionResult.PASS;
+        }
+        if (ticks++ % 100 != 0) {
+            return ActionResult.PASS;
+        }
         for(var r : MonitorManager.regions) {
+            // 判断玩家是不是处于记录区同维度
+            if(!r.world.equals(player.getWorld().getRegistryKey().getValue().toString())) {
+                continue;
+            }
             PlayerFlagInterface playerFlagInterface = (PlayerFlagInterface) player;
             // 判断是否进入某区域
             if (Vec3dUtils.isPointInRange(player.getPos(), r.start, r.end) && r.regionName.equals(player.getWorld().getDimensionEntry().getIdAsString())) {

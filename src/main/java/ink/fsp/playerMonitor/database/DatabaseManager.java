@@ -50,6 +50,7 @@ public class DatabaseManager {
             statement.execute("CREATE TABLE tracker (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "player_uuid    VARCHAR NOT NULL," +
+                    "region_name VARCHAR NOT NULL, " +
                     "X NUMERIC NOT NULL, " +
                     "Y NUMERIC NOT NULL, " +
                     "Z NUMERIC NOT NULL, " +
@@ -110,17 +111,18 @@ public class DatabaseManager {
         }
     }
 
-    public static int insertTrackn(UUID playerUuid, double x, double y, double z, String dimension, Date datetime) {
-        String sql = "INSERT INTO tracker (player_uuid, x, y, z, dimension, datetime) VALUES (?, ?, ?, ?, ?, ?)";
+    public static int insertTrackn(UUID playerUuid, String regionName, double x, double y, double z, String dimension, Date datetime) {
+        String sql = "INSERT INTO tracker (player_uuid, region_name, x, y, z, dimension, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, playerUuid.toString());
-            statement.setDouble(2, x);
-            statement.setDouble(3, y);
-            statement.setDouble(4, z);
-            statement.setString(5, dimension);
-            statement.setLong(6, datetime.getTime());
+            statement.setString(2, regionName);
+            statement.setDouble(3, x);
+            statement.setDouble(4, y);
+            statement.setDouble(5, z);
+            statement.setString(6, dimension);
+            statement.setLong(7, datetime.getTime());
             int result = statement.executeUpdate();
             statement.close();
             return result;

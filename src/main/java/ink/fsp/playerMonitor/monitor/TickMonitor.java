@@ -9,21 +9,21 @@ import org.slf4j.Logger;
 import java.util.Date;
 
 public class TickMonitor implements ServerTickEvents.EndTick {
-    private int ticks = 0;
+    private long ticks = 0;
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
 
     @Override
     public void onEndTick(MinecraftServer minecraftServer) {
-        if (ticks++ % 100 == 0) {
-            minecraftServer.getPlayerManager().getPlayerList().forEach(player -> DatabaseManager.insertTrackn(
-                    player.getGameProfile().getId(),
-                    player.getX(),
-                    player.getY(),
-                    player.getZ(),
-                    player.getWorld().getDimensionEntry().getIdAsString(),
-                    new Date()
-            ));
-            ticks = 0;
-        }
+//        if (ticks++ % 100 == 0) {
+//            minecraftServer.getPlayerManager().getPlayerList().forEach(player -> DatabaseManager.insertTrackn(
+//                    player.getGameProfile().getId(),
+//                    player.getX(),
+//                    player.getY(),
+//                    player.getZ(),
+//                    player.getWorld().getDimensionEntry().getIdAsString(),
+//                    new Date()
+//            ));
+//            ticks = 0;
+//        }
     }
 }

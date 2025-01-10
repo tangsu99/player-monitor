@@ -29,16 +29,16 @@ public class ShowSelectSubCmd {
 
     private static int showSelectByPlayer(ServerCommandSource source, String player) {
         if (source.getPlayer() != null) {
-            source.sendFeedback(() -> Text.of(player), false);
-            ParticleUtils.drawParticleBox(
-                    source.getServer().getOverworld(), source.getEntity().getPos(),
-                    10,
-                    10,
-                    10,
-                    10,
-                    10,
-                    true
-            );
+//            source.sendFeedback(() -> Text.of(player), false);
+//            ParticleUtils.drawParticleBox(
+//                    source.getServer().getOverworld(), source.getEntity().getPos(),
+//                    10,
+//                    10,
+//                    10,
+//                    10,
+//                    10,
+//                    true
+//            );
             return 1;
         }
         source.sendMessage(Text.of("此命令只能玩家执行"));
