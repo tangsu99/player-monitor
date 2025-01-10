@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class DatabaseManager {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
-    private static final String DATABASE_URL = "jdbc:sqlite:test.db";
+    private static final String DATABASE_URL = "jdbc:sqlite:PM.db";
 
     static {
         try {
@@ -105,8 +105,6 @@ public class DatabaseManager {
             LOGGER.info("regions 创建成功");
             return true;
         } catch (SQLException e) {
-            LOGGER.warn("regions 创建错误");
-            LOGGER.warn(e.getMessage());
             return false;
         }
     }
