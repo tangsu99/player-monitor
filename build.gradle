@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.8-SNAPSHOT'
 	id 'maven-publish'
+//	id 'com.github.johnrengelman.shadow' version '7.1.2' // 使用最新版本
 }
 
 version = project.mod_version
@@ -39,8 +40,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	// 添加 SQLite JDBC 驱动依赖
-	implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-	
+//	implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
+	implementation(include('org.xerial:sqlite-jdbc:3.36.0.3'))
 }
 
 processResources {
