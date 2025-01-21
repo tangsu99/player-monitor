@@ -60,6 +60,7 @@ public class SelectModeSubCmd {
             return 1;
         }
         PlayerFlagInterface ps = (PlayerFlagInterface) source.getPlayer();
+        ps.setSelectMode(false);
         source.sendMessage(Text.of("name: " + name + "; comments: " + (comments == null ? "" : comments)));
         return MonitorManager
                 .addRegions(

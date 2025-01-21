@@ -31,13 +31,11 @@ public class MonitorManager {
         if (inPlayers(uuid)) {  // 在
             // 更新数据
             DatabaseManager.UpdatePlayerNameByUuid(player.getGameProfile().getName(), uuid, new Date());
-            LOGGER.info("{}: {}", player.getGameProfile().getName(), player.getUuidAsString());
         }else {     // 不在
             // 写入数据库
             PlayerItem playerItem = PlayerItem.getPlayerItem(player);
             DatabaseManager.insertPlayers(playerItem);
             players.add(playerItem);
-            LOGGER.info(playerItem.toString());
         }
     }
 
