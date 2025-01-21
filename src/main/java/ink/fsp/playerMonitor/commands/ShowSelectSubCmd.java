@@ -100,12 +100,14 @@ public class ShowSelectSubCmd {
             Date targetTime = new Date(currentTime.getTime() - (time * 1000L * 60L));
             source.sendFeedback(() -> Text.of(playerName + ": " +ft.format(currentTime) + " " + ft.format(targetTime)), false);
             ArrayList<TrackerItem> result = DatabaseManager.selectTrackn(playerName, regionName, currentTime, targetTime);
-            result.forEach(trackerItem -> {
-                if(!source.getPlayer().getWorld().getRegistryKey().getValue().toString().equals(trackerItem.regionName)) {
-                    return;
-                }
-                ParticleManager.addParticle(new ParticleItem(source.getWorld(), new Vec3d(trackerItem.x, trackerItem.y, trackerItem.z), 20, true));
-            });
+            if(result != null && !result.isEmpty()) {
+                result.forEach(trackerItem -> {
+                    if(!trackerItem.dimension.equals(source.getPlayer().getWorld().getRegistryKey().getValue().toString())){
+                        return;
+                    }
+                    ParticleManager.addParticle(new ParticleItem(source.getWorld(), new Vec3d(trackerItem.x, trackerItem.y, trackerItem.z), 20, true));
+                });
+            }
             source.sendMessage(Text.of("查询到" + result.size() + "条数据"));
             return 1;
         }
