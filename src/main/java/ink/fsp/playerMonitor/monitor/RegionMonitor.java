@@ -17,6 +17,8 @@ import java.util.Date;
 public class RegionMonitor implements PlayerMoveCallback {
     private static final Logger LOGGER = PlayerMonitor.LOGGER;
 
+    // TODO
+    // 记录所有，然后根据选区查
     @Override
     public ActionResult onPlayerMove(PlayerEntity player, World world) {
         if(player.getServer()==null) {
